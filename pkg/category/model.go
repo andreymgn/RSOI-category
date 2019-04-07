@@ -3,6 +3,7 @@ package category
 import (
 	"database/sql"
 	"errors"
+	"time"
 
 	"github.com/google/uuid"
 	_ "github.com/lib/pq"
@@ -11,6 +12,7 @@ import (
 var (
 	errNotFound           = errors.New("category not found")
 	errCategoryNotCreated = errors.New("category not created")
+	errReportNotCreated   = errors.New("report not created")
 )
 
 // Category describes category created by user
@@ -20,10 +22,23 @@ type Category struct {
 	Name    string
 }
 
+// Report describes report submitted by user
+type Report struct {
+	UID         uuid.UUID
+	CategoryUID uuid.UUID
+	PostUID     uuid.UUID
+	CommentUID  uuid.UUID
+	Reason      string
+	CreatedAt   time.Time
+}
+
 type datastore interface {
 	getAllCategories(int32, int32) ([]*Category, error)
 	getCategoryInfo(uuid.UUID) (*Category, error)
 	createCategory(string, uuid.UUID) (*Category, error)
+	getAllReports(uuid.UUID, int32, int32) ([]*Report, error)
+	createReport(uuid.UUID, uuid.UUID, uuid.UUID, string) (*Report, error)
+	deleteReport(uuid.UUID) error
 }
 
 type db struct {
@@ -116,4 +131,96 @@ func (db *db) createCategory(name string, userUID uuid.UUID) (*Category, error) 
 	}
 
 	return category, nil
+}
+
+func (db *db) getAllReports(categoryUID uuid.UUID, pageSize, pageNumber int32) ([]*Report, error) {
+	query := `SELECT uid, post_uid, comment_uid, reason, created_at
+	          FROM reports
+	          WHERE action_taken=false AND category_uid=$1
+	          ORDER BY created_at DESC LIMIT $2 OFFSET $3`
+	lastRecord := pageNumber * pageSize
+	rows, err := db.Query(query, categoryUID.String(), pageSize, lastRecord)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+	result := make([]*Report, 0)
+	for rows.Next() {
+		report := new(Report)
+		var uid, postUID, commentUID string
+		err := rows.Scan(&uid, &postUID, &commentUID, &report.Reason, &report.CreatedAt)
+		if err != nil {
+			return nil, err
+		}
+
+		report.UID, err = uuid.Parse(uid)
+		if err != nil {
+			return nil, err
+		}
+
+		report.PostUID, err = uuid.Parse(postUID)
+		if err != nil {
+			return nil, err
+		}
+
+		report.CommentUID, err = uuid.Parse(commentUID)
+		if err != nil {
+			return nil, err
+		}
+
+		report.CategoryUID = categoryUID
+
+		result = append(result, report)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
+
+func (db *db) createReport(categoryUID, postUID, commentUID uuid.UUID, reason string) (*Report, error) {
+	report := new(Report)
+
+	query := "INSERT INTO report (uid, category_uid, post_uid, comment_uid, reason, created_at) VALUES ($1, $2, $3, $4, $5, $6)"
+	uid := uuid.New()
+
+	report.UID = uid
+	report.CategoryUID = categoryUID
+	report.PostUID = postUID
+	report.CommentUID = commentUID
+	report.Reason = reason
+	report.CreatedAt = time.Now()
+
+	result, err := db.Exec(query,
+		report.UID.String(), report.CategoryUID.String(), report.PostUID.String(),
+		report.CommentUID.String(), report.Reason, report.CreatedAt,
+	)
+	nRows, err := result.RowsAffected()
+	if err != nil {
+		return nil, err
+	}
+
+	if nRows == 0 {
+		return nil, errReportNotCreated
+	}
+
+	return report, nil
+}
+
+func (db *db) deleteReport(uid uuid.UUID) error {
+	query := "DELETE FROM reports WHERE uid=$1"
+	result, err := db.Exec(query, uid.String())
+	nRows, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if nRows == 0 {
+		return errNotFound
+	}
+
+	return nil
 }

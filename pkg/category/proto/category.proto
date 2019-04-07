@@ -1,11 +1,17 @@
 syntax = "proto3";
 
+import "google/protobuf/timestamp.proto";
+
 package category;
 
 service Category {
     rpc ListCategories(ListCategoriesRequest) returns (ListCategoriesResponse);
     rpc GetCategoryInfo(GetCategoryInfoRequest) returns (SingleCategory);
     rpc CreateCategory(CreateCategoryRequest) returns (SingleCategory);
+
+    rpc ListReports(ListReportsRequest) returns (ListReportsResponse);
+    rpc CreateReport(CreateReportRequest) returns (SingleReport);
+    rpc DeleteReport(DeleteReportRequest) returns (DeleteReportResponse);
 }
 
 message ListCategoriesRequest {
@@ -32,4 +38,40 @@ message CreateCategoryRequest {
 
 message GetCategoryInfoRequest {
     string uid = 1;
+}
+
+message ListReportsRequest {
+    string categoryUid = 1;
+    int32 pageSize = 2;
+    int32 pageNumber = 3;
+}
+
+message ListReportsResponse {
+    repeated SingleReport reports = 1;
+    int32 pageSize = 2;
+    int32 pageNumber = 3;
+}
+
+message CreateReportRequest {
+    string categoryUid = 1;
+    string postUid = 2;
+    string commentUid = 3;
+    string reason = 4;
+}
+
+message SingleReport {
+    string uid = 1;
+    string categoryUid = 2;
+    string postUid = 3;
+    string commentUid = 4;
+    string reason = 5;
+    google.protobuf.Timestamp createdAt = 6;
+}
+
+message DeleteReportRequest {
+    string uid = 1;
+}
+
+message DeleteReportResponse {
+
 }

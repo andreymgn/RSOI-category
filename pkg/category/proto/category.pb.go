@@ -6,6 +6,7 @@ package category
 import proto "github.com/golang/protobuf/proto"
 import fmt "fmt"
 import math "math"
+import timestamp "github.com/golang/protobuf/ptypes/timestamp"
 
 import (
 	context "golang.org/x/net/context"
@@ -35,7 +36,7 @@ func (m *ListCategoriesRequest) Reset()         { *m = ListCategoriesRequest{} }
 func (m *ListCategoriesRequest) String() string { return proto.CompactTextString(m) }
 func (*ListCategoriesRequest) ProtoMessage()    {}
 func (*ListCategoriesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_category_68b155f4386e14f2, []int{0}
+	return fileDescriptor_category_456da4612fbc960d, []int{0}
 }
 func (m *ListCategoriesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListCategoriesRequest.Unmarshal(m, b)
@@ -82,7 +83,7 @@ func (m *ListCategoriesResponse) Reset()         { *m = ListCategoriesResponse{}
 func (m *ListCategoriesResponse) String() string { return proto.CompactTextString(m) }
 func (*ListCategoriesResponse) ProtoMessage()    {}
 func (*ListCategoriesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_category_68b155f4386e14f2, []int{1}
+	return fileDescriptor_category_456da4612fbc960d, []int{1}
 }
 func (m *ListCategoriesResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListCategoriesResponse.Unmarshal(m, b)
@@ -136,7 +137,7 @@ func (m *SingleCategory) Reset()         { *m = SingleCategory{} }
 func (m *SingleCategory) String() string { return proto.CompactTextString(m) }
 func (*SingleCategory) ProtoMessage()    {}
 func (*SingleCategory) Descriptor() ([]byte, []int) {
-	return fileDescriptor_category_68b155f4386e14f2, []int{2}
+	return fileDescriptor_category_456da4612fbc960d, []int{2}
 }
 func (m *SingleCategory) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SingleCategory.Unmarshal(m, b)
@@ -189,7 +190,7 @@ func (m *CreateCategoryRequest) Reset()         { *m = CreateCategoryRequest{} }
 func (m *CreateCategoryRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateCategoryRequest) ProtoMessage()    {}
 func (*CreateCategoryRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_category_68b155f4386e14f2, []int{3}
+	return fileDescriptor_category_456da4612fbc960d, []int{3}
 }
 func (m *CreateCategoryRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateCategoryRequest.Unmarshal(m, b)
@@ -234,7 +235,7 @@ func (m *GetCategoryInfoRequest) Reset()         { *m = GetCategoryInfoRequest{}
 func (m *GetCategoryInfoRequest) String() string { return proto.CompactTextString(m) }
 func (*GetCategoryInfoRequest) ProtoMessage()    {}
 func (*GetCategoryInfoRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_category_68b155f4386e14f2, []int{4}
+	return fileDescriptor_category_456da4612fbc960d, []int{4}
 }
 func (m *GetCategoryInfoRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetCategoryInfoRequest.Unmarshal(m, b)
@@ -261,12 +262,334 @@ func (m *GetCategoryInfoRequest) GetUid() string {
 	return ""
 }
 
+type ListReportsRequest struct {
+	CategoryUid          string   `protobuf:"bytes,1,opt,name=categoryUid,proto3" json:"categoryUid,omitempty"`
+	PageSize             int32    `protobuf:"varint,2,opt,name=pageSize,proto3" json:"pageSize,omitempty"`
+	PageNumber           int32    `protobuf:"varint,3,opt,name=pageNumber,proto3" json:"pageNumber,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ListReportsRequest) Reset()         { *m = ListReportsRequest{} }
+func (m *ListReportsRequest) String() string { return proto.CompactTextString(m) }
+func (*ListReportsRequest) ProtoMessage()    {}
+func (*ListReportsRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_category_456da4612fbc960d, []int{5}
+}
+func (m *ListReportsRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ListReportsRequest.Unmarshal(m, b)
+}
+func (m *ListReportsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ListReportsRequest.Marshal(b, m, deterministic)
+}
+func (dst *ListReportsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListReportsRequest.Merge(dst, src)
+}
+func (m *ListReportsRequest) XXX_Size() int {
+	return xxx_messageInfo_ListReportsRequest.Size(m)
+}
+func (m *ListReportsRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListReportsRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListReportsRequest proto.InternalMessageInfo
+
+func (m *ListReportsRequest) GetCategoryUid() string {
+	if m != nil {
+		return m.CategoryUid
+	}
+	return ""
+}
+
+func (m *ListReportsRequest) GetPageSize() int32 {
+	if m != nil {
+		return m.PageSize
+	}
+	return 0
+}
+
+func (m *ListReportsRequest) GetPageNumber() int32 {
+	if m != nil {
+		return m.PageNumber
+	}
+	return 0
+}
+
+type ListReportsResponse struct {
+	Reports              []*SingleReport `protobuf:"bytes,1,rep,name=reports,proto3" json:"reports,omitempty"`
+	PageSize             int32           `protobuf:"varint,2,opt,name=pageSize,proto3" json:"pageSize,omitempty"`
+	PageNumber           int32           `protobuf:"varint,3,opt,name=pageNumber,proto3" json:"pageNumber,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
+	XXX_unrecognized     []byte          `json:"-"`
+	XXX_sizecache        int32           `json:"-"`
+}
+
+func (m *ListReportsResponse) Reset()         { *m = ListReportsResponse{} }
+func (m *ListReportsResponse) String() string { return proto.CompactTextString(m) }
+func (*ListReportsResponse) ProtoMessage()    {}
+func (*ListReportsResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_category_456da4612fbc960d, []int{6}
+}
+func (m *ListReportsResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ListReportsResponse.Unmarshal(m, b)
+}
+func (m *ListReportsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ListReportsResponse.Marshal(b, m, deterministic)
+}
+func (dst *ListReportsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListReportsResponse.Merge(dst, src)
+}
+func (m *ListReportsResponse) XXX_Size() int {
+	return xxx_messageInfo_ListReportsResponse.Size(m)
+}
+func (m *ListReportsResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListReportsResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListReportsResponse proto.InternalMessageInfo
+
+func (m *ListReportsResponse) GetReports() []*SingleReport {
+	if m != nil {
+		return m.Reports
+	}
+	return nil
+}
+
+func (m *ListReportsResponse) GetPageSize() int32 {
+	if m != nil {
+		return m.PageSize
+	}
+	return 0
+}
+
+func (m *ListReportsResponse) GetPageNumber() int32 {
+	if m != nil {
+		return m.PageNumber
+	}
+	return 0
+}
+
+type CreateReportRequest struct {
+	CategoryUid          string   `protobuf:"bytes,1,opt,name=categoryUid,proto3" json:"categoryUid,omitempty"`
+	PostUid              string   `protobuf:"bytes,2,opt,name=postUid,proto3" json:"postUid,omitempty"`
+	CommentUid           string   `protobuf:"bytes,3,opt,name=commentUid,proto3" json:"commentUid,omitempty"`
+	Reason               string   `protobuf:"bytes,4,opt,name=reason,proto3" json:"reason,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *CreateReportRequest) Reset()         { *m = CreateReportRequest{} }
+func (m *CreateReportRequest) String() string { return proto.CompactTextString(m) }
+func (*CreateReportRequest) ProtoMessage()    {}
+func (*CreateReportRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_category_456da4612fbc960d, []int{7}
+}
+func (m *CreateReportRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CreateReportRequest.Unmarshal(m, b)
+}
+func (m *CreateReportRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CreateReportRequest.Marshal(b, m, deterministic)
+}
+func (dst *CreateReportRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateReportRequest.Merge(dst, src)
+}
+func (m *CreateReportRequest) XXX_Size() int {
+	return xxx_messageInfo_CreateReportRequest.Size(m)
+}
+func (m *CreateReportRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateReportRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateReportRequest proto.InternalMessageInfo
+
+func (m *CreateReportRequest) GetCategoryUid() string {
+	if m != nil {
+		return m.CategoryUid
+	}
+	return ""
+}
+
+func (m *CreateReportRequest) GetPostUid() string {
+	if m != nil {
+		return m.PostUid
+	}
+	return ""
+}
+
+func (m *CreateReportRequest) GetCommentUid() string {
+	if m != nil {
+		return m.CommentUid
+	}
+	return ""
+}
+
+func (m *CreateReportRequest) GetReason() string {
+	if m != nil {
+		return m.Reason
+	}
+	return ""
+}
+
+type SingleReport struct {
+	Uid                  string               `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid,omitempty"`
+	CategoryUid          string               `protobuf:"bytes,2,opt,name=categoryUid,proto3" json:"categoryUid,omitempty"`
+	PostUid              string               `protobuf:"bytes,3,opt,name=postUid,proto3" json:"postUid,omitempty"`
+	CommentUid           string               `protobuf:"bytes,4,opt,name=commentUid,proto3" json:"commentUid,omitempty"`
+	Reason               string               `protobuf:"bytes,5,opt,name=reason,proto3" json:"reason,omitempty"`
+	CreatedAt            *timestamp.Timestamp `protobuf:"bytes,6,opt,name=createdAt,proto3" json:"createdAt,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
+	XXX_unrecognized     []byte               `json:"-"`
+	XXX_sizecache        int32                `json:"-"`
+}
+
+func (m *SingleReport) Reset()         { *m = SingleReport{} }
+func (m *SingleReport) String() string { return proto.CompactTextString(m) }
+func (*SingleReport) ProtoMessage()    {}
+func (*SingleReport) Descriptor() ([]byte, []int) {
+	return fileDescriptor_category_456da4612fbc960d, []int{8}
+}
+func (m *SingleReport) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_SingleReport.Unmarshal(m, b)
+}
+func (m *SingleReport) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_SingleReport.Marshal(b, m, deterministic)
+}
+func (dst *SingleReport) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SingleReport.Merge(dst, src)
+}
+func (m *SingleReport) XXX_Size() int {
+	return xxx_messageInfo_SingleReport.Size(m)
+}
+func (m *SingleReport) XXX_DiscardUnknown() {
+	xxx_messageInfo_SingleReport.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SingleReport proto.InternalMessageInfo
+
+func (m *SingleReport) GetUid() string {
+	if m != nil {
+		return m.Uid
+	}
+	return ""
+}
+
+func (m *SingleReport) GetCategoryUid() string {
+	if m != nil {
+		return m.CategoryUid
+	}
+	return ""
+}
+
+func (m *SingleReport) GetPostUid() string {
+	if m != nil {
+		return m.PostUid
+	}
+	return ""
+}
+
+func (m *SingleReport) GetCommentUid() string {
+	if m != nil {
+		return m.CommentUid
+	}
+	return ""
+}
+
+func (m *SingleReport) GetReason() string {
+	if m != nil {
+		return m.Reason
+	}
+	return ""
+}
+
+func (m *SingleReport) GetCreatedAt() *timestamp.Timestamp {
+	if m != nil {
+		return m.CreatedAt
+	}
+	return nil
+}
+
+type DeleteReportRequest struct {
+	Uid                  string   `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *DeleteReportRequest) Reset()         { *m = DeleteReportRequest{} }
+func (m *DeleteReportRequest) String() string { return proto.CompactTextString(m) }
+func (*DeleteReportRequest) ProtoMessage()    {}
+func (*DeleteReportRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_category_456da4612fbc960d, []int{9}
+}
+func (m *DeleteReportRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_DeleteReportRequest.Unmarshal(m, b)
+}
+func (m *DeleteReportRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_DeleteReportRequest.Marshal(b, m, deterministic)
+}
+func (dst *DeleteReportRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteReportRequest.Merge(dst, src)
+}
+func (m *DeleteReportRequest) XXX_Size() int {
+	return xxx_messageInfo_DeleteReportRequest.Size(m)
+}
+func (m *DeleteReportRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_DeleteReportRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DeleteReportRequest proto.InternalMessageInfo
+
+func (m *DeleteReportRequest) GetUid() string {
+	if m != nil {
+		return m.Uid
+	}
+	return ""
+}
+
+type DeleteReportResponse struct {
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *DeleteReportResponse) Reset()         { *m = DeleteReportResponse{} }
+func (m *DeleteReportResponse) String() string { return proto.CompactTextString(m) }
+func (*DeleteReportResponse) ProtoMessage()    {}
+func (*DeleteReportResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_category_456da4612fbc960d, []int{10}
+}
+func (m *DeleteReportResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_DeleteReportResponse.Unmarshal(m, b)
+}
+func (m *DeleteReportResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_DeleteReportResponse.Marshal(b, m, deterministic)
+}
+func (dst *DeleteReportResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteReportResponse.Merge(dst, src)
+}
+func (m *DeleteReportResponse) XXX_Size() int {
+	return xxx_messageInfo_DeleteReportResponse.Size(m)
+}
+func (m *DeleteReportResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_DeleteReportResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DeleteReportResponse proto.InternalMessageInfo
+
 func init() {
 	proto.RegisterType((*ListCategoriesRequest)(nil), "category.ListCategoriesRequest")
 	proto.RegisterType((*ListCategoriesResponse)(nil), "category.ListCategoriesResponse")
 	proto.RegisterType((*SingleCategory)(nil), "category.SingleCategory")
 	proto.RegisterType((*CreateCategoryRequest)(nil), "category.CreateCategoryRequest")
 	proto.RegisterType((*GetCategoryInfoRequest)(nil), "category.GetCategoryInfoRequest")
+	proto.RegisterType((*ListReportsRequest)(nil), "category.ListReportsRequest")
+	proto.RegisterType((*ListReportsResponse)(nil), "category.ListReportsResponse")
+	proto.RegisterType((*CreateReportRequest)(nil), "category.CreateReportRequest")
+	proto.RegisterType((*SingleReport)(nil), "category.SingleReport")
+	proto.RegisterType((*DeleteReportRequest)(nil), "category.DeleteReportRequest")
+	proto.RegisterType((*DeleteReportResponse)(nil), "category.DeleteReportResponse")
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -284,6 +607,9 @@ type CategoryClient interface {
 	ListCategories(ctx context.Context, in *ListCategoriesRequest, opts ...grpc.CallOption) (*ListCategoriesResponse, error)
 	GetCategoryInfo(ctx context.Context, in *GetCategoryInfoRequest, opts ...grpc.CallOption) (*SingleCategory, error)
 	CreateCategory(ctx context.Context, in *CreateCategoryRequest, opts ...grpc.CallOption) (*SingleCategory, error)
+	ListReports(ctx context.Context, in *ListReportsRequest, opts ...grpc.CallOption) (*ListReportsResponse, error)
+	CreateReport(ctx context.Context, in *CreateReportRequest, opts ...grpc.CallOption) (*SingleReport, error)
+	DeleteReport(ctx context.Context, in *DeleteReportRequest, opts ...grpc.CallOption) (*DeleteReportResponse, error)
 }
 
 type categoryClient struct {
@@ -321,11 +647,41 @@ func (c *categoryClient) CreateCategory(ctx context.Context, in *CreateCategoryR
 	return out, nil
 }
 
+func (c *categoryClient) ListReports(ctx context.Context, in *ListReportsRequest, opts ...grpc.CallOption) (*ListReportsResponse, error) {
+	out := new(ListReportsResponse)
+	err := c.cc.Invoke(ctx, "/category.Category/ListReports", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *categoryClient) CreateReport(ctx context.Context, in *CreateReportRequest, opts ...grpc.CallOption) (*SingleReport, error) {
+	out := new(SingleReport)
+	err := c.cc.Invoke(ctx, "/category.Category/CreateReport", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *categoryClient) DeleteReport(ctx context.Context, in *DeleteReportRequest, opts ...grpc.CallOption) (*DeleteReportResponse, error) {
+	out := new(DeleteReportResponse)
+	err := c.cc.Invoke(ctx, "/category.Category/DeleteReport", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CategoryServer is the server API for Category service.
 type CategoryServer interface {
 	ListCategories(context.Context, *ListCategoriesRequest) (*ListCategoriesResponse, error)
 	GetCategoryInfo(context.Context, *GetCategoryInfoRequest) (*SingleCategory, error)
 	CreateCategory(context.Context, *CreateCategoryRequest) (*SingleCategory, error)
+	ListReports(context.Context, *ListReportsRequest) (*ListReportsResponse, error)
+	CreateReport(context.Context, *CreateReportRequest) (*SingleReport, error)
+	DeleteReport(context.Context, *DeleteReportRequest) (*DeleteReportResponse, error)
 }
 
 func RegisterCategoryServer(s *grpc.Server, srv CategoryServer) {
@@ -386,6 +742,60 @@ func _Category_CreateCategory_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Category_ListReports_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListReportsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CategoryServer).ListReports(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/category.Category/ListReports",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CategoryServer).ListReports(ctx, req.(*ListReportsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Category_CreateReport_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateReportRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CategoryServer).CreateReport(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/category.Category/CreateReport",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CategoryServer).CreateReport(ctx, req.(*CreateReportRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Category_DeleteReport_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteReportRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CategoryServer).DeleteReport(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/category.Category/DeleteReport",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CategoryServer).DeleteReport(ctx, req.(*DeleteReportRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Category_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "category.Category",
 	HandlerType: (*CategoryServer)(nil),
@@ -402,35 +812,62 @@ var _Category_serviceDesc = grpc.ServiceDesc{
 			MethodName: "CreateCategory",
 			Handler:    _Category_CreateCategory_Handler,
 		},
+		{
+			MethodName: "ListReports",
+			Handler:    _Category_ListReports_Handler,
+		},
+		{
+			MethodName: "CreateReport",
+			Handler:    _Category_CreateReport_Handler,
+		},
+		{
+			MethodName: "DeleteReport",
+			Handler:    _Category_DeleteReport_Handler,
+		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "pkg/category/proto/category.proto",
 }
 
 func init() {
-	proto.RegisterFile("pkg/category/proto/category.proto", fileDescriptor_category_68b155f4386e14f2)
+	proto.RegisterFile("pkg/category/proto/category.proto", fileDescriptor_category_456da4612fbc960d)
 }
 
-var fileDescriptor_category_68b155f4386e14f2 = []byte{
-	// 306 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x92, 0xcd, 0x4e, 0x83, 0x40,
-	0x14, 0x85, 0x33, 0xad, 0x3f, 0x70, 0x4d, 0xd0, 0xdc, 0xa4, 0x0d, 0x61, 0xa1, 0xc8, 0xaa, 0x71,
-	0xd1, 0x26, 0x75, 0xe3, 0xbe, 0x31, 0xc6, 0xf8, 0x13, 0x33, 0xc4, 0x07, 0xa0, 0xed, 0x95, 0x4c,
-	0xb4, 0x80, 0x0c, 0x2c, 0xf0, 0x21, 0x7c, 0x61, 0x37, 0xa6, 0x23, 0x0c, 0xd0, 0x82, 0xbb, 0x7b,
-	0x86, 0x33, 0x27, 0x1f, 0xe7, 0x0e, 0x5c, 0x26, 0xef, 0xe1, 0x6c, 0x15, 0x64, 0x14, 0xc6, 0x69,
-	0x31, 0x4b, 0xd2, 0x38, 0x8b, 0xb5, 0x9c, 0x2a, 0x89, 0x46, 0xa5, 0x3d, 0x1f, 0x46, 0x8f, 0x42,
-	0x66, 0x8b, 0x3f, 0x2d, 0x48, 0x72, 0xfa, 0xcc, 0x49, 0x66, 0xe8, 0x80, 0x91, 0x04, 0x21, 0xf9,
-	0xe2, 0x8b, 0x6c, 0xe6, 0xb2, 0xc9, 0x21, 0xd7, 0x1a, 0xcf, 0x01, 0xb6, 0xf3, 0x73, 0xbe, 0x59,
-	0x52, 0x6a, 0x0f, 0xd4, 0xd7, 0xc6, 0x89, 0xf7, 0xcd, 0x60, 0xbc, 0x9b, 0x2a, 0x93, 0x38, 0x92,
-	0x84, 0x37, 0x00, 0x2b, 0x7d, 0x6a, 0x33, 0x77, 0x38, 0x39, 0x99, 0xdb, 0x53, 0x8d, 0xe7, 0x8b,
-	0x28, 0xfc, 0xa0, 0xf2, 0x5e, 0xc1, 0x1b, 0xde, 0x16, 0xd0, 0xe0, 0x5f, 0xa0, 0xe1, 0x1e, 0xd0,
-	0x0b, 0x58, 0xed, 0x64, 0x3c, 0x83, 0x61, 0x2e, 0xd6, 0xea, 0xcf, 0x4c, 0xbe, 0x1d, 0xd1, 0x86,
-	0xe3, 0x5c, 0x52, 0xfa, 0x2a, 0xd6, 0x2a, 0xde, 0xe4, 0x95, 0x44, 0x84, 0x83, 0x28, 0xd8, 0x90,
-	0xca, 0x35, 0xb9, 0x9a, 0xbd, 0x5b, 0x18, 0x2d, 0x52, 0x0a, 0xb2, 0x9a, 0xb5, 0xec, 0xad, 0x32,
-	0xb3, 0xda, 0xdc, 0x1f, 0xed, 0x5d, 0xc1, 0xf8, 0x8e, 0xaa, 0x9e, 0x8a, 0xfb, 0xe8, 0x2d, 0xae,
-	0x72, 0xf6, 0x00, 0xe7, 0x3f, 0x0c, 0x0c, 0xcd, 0xef, 0x83, 0xd5, 0x6e, 0x18, 0x2f, 0xea, 0x16,
-	0x3b, 0x37, 0xea, 0xb8, 0xfd, 0x86, 0x72, 0x39, 0x4f, 0x70, 0xba, 0x43, 0x83, 0x8d, 0x4b, 0xdd,
-	0xa0, 0x4e, 0xef, 0xf6, 0xf0, 0x01, 0xac, 0x76, 0x47, 0x4d, 0xc6, 0xce, 0xf6, 0xfa, 0xc3, 0x96,
-	0x47, 0xea, 0xe5, 0x5e, 0xff, 0x06, 0x00, 0x00, 0xff, 0xff, 0xc8, 0x35, 0x4d, 0xcc, 0xde, 0x02,
-	0x00, 0x00,
+var fileDescriptor_category_456da4612fbc960d = []byte{
+	// 545 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x54, 0xcd, 0x6e, 0x9b, 0x40,
+	0x10, 0x16, 0xc6, 0xf1, 0xcf, 0xd8, 0x72, 0xab, 0x75, 0x83, 0x10, 0x6a, 0x12, 0xca, 0xa5, 0x56,
+	0x0f, 0xb8, 0x72, 0x2f, 0xb9, 0x56, 0x69, 0x54, 0xf5, 0x27, 0x55, 0x85, 0x9b, 0x07, 0xc0, 0xf6,
+	0x04, 0xa1, 0x1a, 0x96, 0xc2, 0x72, 0x70, 0xaf, 0x3d, 0xf5, 0xd2, 0x47, 0xeb, 0x1b, 0xf4, 0x5d,
+	0x2a, 0xef, 0x02, 0x5e, 0x30, 0xa0, 0x48, 0xbe, 0xed, 0xec, 0x7c, 0x3b, 0x7c, 0xf3, 0xcd, 0x7c,
+	0xc0, 0x8b, 0xe8, 0xbb, 0x37, 0x5f, 0xbb, 0x0c, 0x3d, 0x1a, 0xef, 0xe6, 0x51, 0x4c, 0x19, 0x2d,
+	0x42, 0x9b, 0x87, 0x64, 0x90, 0xc7, 0xc6, 0x95, 0x47, 0xa9, 0xb7, 0x45, 0x01, 0x5b, 0xa5, 0x0f,
+	0x73, 0xe6, 0x07, 0x98, 0x30, 0x37, 0x88, 0x04, 0xd4, 0x5a, 0xc2, 0xf9, 0x67, 0x3f, 0x61, 0x37,
+	0xe2, 0x81, 0x8f, 0x89, 0x83, 0x3f, 0x52, 0x4c, 0x18, 0x31, 0x60, 0x10, 0xb9, 0x1e, 0x2e, 0xfd,
+	0x9f, 0xa8, 0x2b, 0xa6, 0x32, 0x3b, 0x73, 0x8a, 0x98, 0x5c, 0x02, 0xec, 0xcf, 0x5f, 0xd2, 0x60,
+	0x85, 0xb1, 0xde, 0xe1, 0x59, 0xe9, 0xc6, 0xfa, 0xa3, 0x80, 0x56, 0xad, 0x9a, 0x44, 0x34, 0x4c,
+	0x90, 0x5c, 0x03, 0xac, 0x8b, 0x5b, 0x5d, 0x31, 0xd5, 0xd9, 0x68, 0xa1, 0xdb, 0x05, 0xff, 0xa5,
+	0x1f, 0x7a, 0x5b, 0xcc, 0xde, 0xed, 0x1c, 0x09, 0x5b, 0x22, 0xd4, 0x69, 0x25, 0xa4, 0x1e, 0x11,
+	0xfa, 0x0a, 0x93, 0x72, 0x65, 0xf2, 0x14, 0xd4, 0xd4, 0xdf, 0xf0, 0xce, 0x86, 0xce, 0xfe, 0x48,
+	0x74, 0xe8, 0xa7, 0x09, 0xc6, 0xf7, 0xfe, 0x86, 0x97, 0x1f, 0x3a, 0x79, 0x48, 0x08, 0x74, 0x43,
+	0x37, 0x40, 0x5e, 0x77, 0xe8, 0xf0, 0xb3, 0x75, 0x0b, 0xe7, 0x37, 0x31, 0xba, 0xec, 0xc0, 0x35,
+	0xd3, 0x2d, 0x07, 0x2b, 0x07, 0x70, 0x73, 0x69, 0xeb, 0x15, 0x68, 0xef, 0x31, 0xd7, 0x69, 0xf7,
+	0x21, 0x7c, 0xa0, 0x79, 0x9d, 0x23, 0x82, 0x56, 0x0c, 0x64, 0x2f, 0xaa, 0x83, 0x11, 0x8d, 0x59,
+	0x31, 0x27, 0x13, 0x46, 0xb9, 0x7a, 0xf7, 0x05, 0x5e, 0xbe, 0x3a, 0x49, 0xb8, 0x5f, 0x0a, 0x4c,
+	0x4b, 0x1f, 0xcd, 0xc6, 0xf8, 0x1a, 0xfa, 0xb1, 0xb8, 0xca, 0x66, 0xa8, 0x55, 0x67, 0x28, 0x5e,
+	0x38, 0x39, 0xec, 0x24, 0x16, 0xbf, 0x15, 0x98, 0x0a, 0xb5, 0xb3, 0xaa, 0x8f, 0xee, 0x5d, 0x87,
+	0x7e, 0x44, 0x13, 0x26, 0x29, 0x9f, 0x85, 0xfb, 0x6f, 0xae, 0x69, 0x10, 0x60, 0xc8, 0x93, 0x62,
+	0xb4, 0xd2, 0x0d, 0xd1, 0xa0, 0x17, 0xa3, 0x9b, 0xd0, 0x50, 0xef, 0xf2, 0x5c, 0x16, 0x59, 0x7f,
+	0x15, 0x18, 0xcb, 0x1d, 0xd6, 0x6c, 0x52, 0x85, 0x56, 0xa7, 0x95, 0x96, 0xda, 0x46, 0xab, 0xdb,
+	0x42, 0xeb, 0x4c, 0xa6, 0x45, 0xae, 0x61, 0xb8, 0xe6, 0x0a, 0x6d, 0xde, 0x32, 0xbd, 0x67, 0x2a,
+	0xb3, 0xd1, 0xc2, 0xb0, 0x85, 0xf9, 0xed, 0xdc, 0xfc, 0xf6, 0xb7, 0xdc, 0xfc, 0xce, 0x01, 0x6c,
+	0xbd, 0x84, 0xe9, 0x3b, 0xdc, 0x62, 0x55, 0xdb, 0xe3, 0xfd, 0xd3, 0xe0, 0x59, 0x19, 0x28, 0x76,
+	0x61, 0xf1, 0x4f, 0x85, 0x41, 0xe1, 0xab, 0x25, 0x4c, 0xca, 0xce, 0x27, 0x57, 0x87, 0xcd, 0xa8,
+	0xfd, 0xd3, 0x18, 0x66, 0x33, 0x20, 0xdb, 0xb6, 0x3b, 0x78, 0x52, 0x71, 0x09, 0x91, 0x1e, 0xd5,
+	0x1b, 0xc8, 0x68, 0xfc, 0xab, 0x90, 0x4f, 0x30, 0x29, 0x7b, 0x57, 0xe6, 0x58, 0xeb, 0xea, 0x96,
+	0x62, 0x1f, 0x61, 0x24, 0x19, 0x84, 0x3c, 0x2f, 0x37, 0x53, 0x36, 0xab, 0x71, 0xd1, 0x90, 0xcd,
+	0xfa, 0xbc, 0x85, 0xb1, 0xbc, 0xe6, 0xe4, 0xa2, 0x4a, 0xab, 0x34, 0x22, 0xa3, 0xc1, 0x73, 0xe4,
+	0x0e, 0xc6, 0xf2, 0xa0, 0xe4, 0x32, 0x35, 0x93, 0x36, 0x2e, 0x9b, 0xd2, 0x82, 0xd5, 0xaa, 0xc7,
+	0xf7, 0xe7, 0xcd, 0xff, 0x00, 0x00, 0x00, 0xff, 0xff, 0x65, 0x19, 0x88, 0x9e, 0x79, 0x06, 0x00,
+	0x00,
 }

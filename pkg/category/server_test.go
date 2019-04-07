@@ -3,6 +3,7 @@ package category
 import (
 	"errors"
 	"testing"
+	"time"
 
 	pb "github.com/andreymgn/RSOI-category/pkg/category/proto"
 	"github.com/google/uuid"
@@ -42,6 +43,36 @@ func (mdb *mockdb) createCategory(name string, userUID uuid.UUID) (*Category, er
 	}
 
 	return nil, errDummy
+}
+
+func (mdb *mockdb) getAllReports(categoryUID uuid.UUID, pageSize, pageNumber int32) ([]*Report, error) {
+	result := make([]*Report, 0)
+	uid1 := uuid.New()
+	uid2 := uuid.New()
+	uid3 := uuid.New()
+
+	result = append(result, &Report{uid1, uid2, uid3, uuid.Nil, "aaa", time.Now()})
+	result = append(result, &Report{uid2, uid3, uid1, uid2, "bbb", time.Now()})
+	result = append(result, &Report{uid3, uid2, uid2, uuid.Nil, "ccc", time.Now()})
+	return result, nil
+}
+
+func (mdb *mockdb) createReport(categoryUID, postUID, commentUID uuid.UUID, reason string) (*Report, error) {
+	if reason == "success" {
+		uid := uuid.New()
+
+		return &Report{uid, categoryUID, postUID, commentUID, reason, time.Now()}, nil
+	}
+
+	return nil, errDummy
+}
+
+func (mdb *mockdb) deleteReport(uid uuid.UUID) error {
+	if uid == uuid.Nil {
+		return nil
+	}
+
+	return errDummy
 }
 
 func TestListCategories(t *testing.T) {
@@ -91,6 +122,58 @@ func TestGetCategoryAdminByPostFail(t *testing.T) {
 	s := &Server{&mockdb{}}
 	req := &pb.GetCategoryInfoRequest{Uid: ""}
 	_, err := s.GetCategoryInfo(context.Background(), req)
+	if err == nil {
+		t.Errorf("expected error, got nothing")
+	}
+}
+
+func TestListReports(t *testing.T) {
+	s := &Server{&mockdb{}}
+	req := &pb.ListReportsRequest{CategoryUid: nilUIDString}
+	_, err := s.ListReports(context.Background(), req)
+	if err != nil {
+		t.Errorf("unexpected error %v", err)
+	}
+}
+
+func TestCreateReport(t *testing.T) {
+	s := &Server{&mockdb{}}
+	req := &pb.CreateReportRequest{Reason: "success", CategoryUid: nilUIDString, PostUid: nilUIDString, CommentUid: nilUIDString}
+	_, err := s.CreateReport(context.Background(), req)
+	if err != nil {
+		t.Errorf("unexpected error %v", err)
+	}
+}
+
+func TestCreateReportFail(t *testing.T) {
+	s := &Server{&mockdb{}}
+
+	req := &pb.CreateReportRequest{Reason: "", CategoryUid: nilUIDString, PostUid: nilUIDString, CommentUid: nilUIDString}
+	_, err := s.CreateReport(context.Background(), req)
+	if err != statusNoReportReason {
+		t.Errorf("unexpected error %v", err)
+	}
+
+	req = &pb.CreateReportRequest{Reason: "fail"}
+	_, err = s.CreateReport(context.Background(), req)
+	if err == nil {
+		t.Errorf("expected error, got nothing")
+	}
+}
+
+func TestDeleteReport(t *testing.T) {
+	s := &Server{&mockdb{}}
+	req := &pb.DeleteReportRequest{Uid: nilUIDString}
+	_, err := s.DeleteReport(context.Background(), req)
+	if err != nil {
+		t.Errorf("unexpected error %v", err)
+	}
+}
+
+func TestDeleteReportFail(t *testing.T) {
+	s := &Server{&mockdb{}}
+	req := &pb.DeleteReportRequest{Uid: ""}
+	_, err := s.DeleteReport(context.Background(), req)
 	if err == nil {
 		t.Errorf("expected error, got nothing")
 	}
