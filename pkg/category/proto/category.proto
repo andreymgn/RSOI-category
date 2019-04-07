@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package category;
+
+service Category {
+    rpc ListCategories(ListCategoriesRequest) returns (ListCategoriesResponse);
+    rpc GetCategoryInfo(GetCategoryInfoRequest) returns (SingleCategory);
+    rpc CreateCategory(CreateCategoryRequest) returns (SingleCategory);
+}
+
+message ListCategoriesRequest {
+    int32 pageSize = 1;
+    int32 pageNumber = 2;
+}
+
+message ListCategoriesResponse {
+    repeated SingleCategory categories = 1;
+    int32 pageSize = 2;
+    int32 pageNumber = 3;
+}
+
+message SingleCategory {
+    string uid = 1;
+    string userUid = 2;
+    string name = 3;
+}
+
+message CreateCategoryRequest {
+    string name = 1;
+    string userUid = 2;
+}
+
+message GetCategoryInfoRequest {
+    string uid = 1;
+}
