@@ -136,7 +136,7 @@ func (db *db) createCategory(name string, userUID uuid.UUID) (*Category, error) 
 func (db *db) getAllReports(categoryUID uuid.UUID, pageSize, pageNumber int32) ([]*Report, error) {
 	query := `SELECT uid, post_uid, comment_uid, reason, created_at
 	          FROM reports
-	          WHERE action_taken=false AND category_uid=$1
+	          WHERE category_uid=$1
 	          ORDER BY created_at DESC LIMIT $2 OFFSET $3`
 	lastRecord := pageNumber * pageSize
 	rows, err := db.Query(query, categoryUID.String(), pageSize, lastRecord)
@@ -184,7 +184,7 @@ func (db *db) getAllReports(categoryUID uuid.UUID, pageSize, pageNumber int32) (
 func (db *db) createReport(categoryUID, postUID, commentUID uuid.UUID, reason string) (*Report, error) {
 	report := new(Report)
 
-	query := "INSERT INTO report (uid, category_uid, post_uid, comment_uid, reason, created_at) VALUES ($1, $2, $3, $4, $5, $6)"
+	query := "INSERT INTO reports (uid, category_uid, post_uid, comment_uid, reason, created_at) VALUES ($1, $2, $3, $4, $5, $6)"
 	uid := uuid.New()
 
 	report.UID = uid
