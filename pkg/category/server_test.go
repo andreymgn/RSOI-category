@@ -13,7 +13,6 @@ import (
 
 var (
 	errDummy     = errors.New("dummy")
-	dummyUID     = uuid.New()
 	nilUIDString = uuid.Nil.String()
 )
 

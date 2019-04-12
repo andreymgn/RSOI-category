@@ -10,11 +10,11 @@ import (
 )
 
 var (
-	statusNoPostTitle    = status.Error(codes.InvalidArgument, "post title is required")
-	statusNotFound       = status.Error(codes.NotFound, "post not found")
-	statusInvalidUUID    = status.Error(codes.InvalidArgument, "invalid UUID")
-	statusNoCategoryName = status.Error(codes.InvalidArgument, "category name is required")
-	statusNoReportReason = status.Error(codes.InvalidArgument, "report reason is required")
+	statusCategoryNotFound = status.Error(codes.NotFound, "category not found")
+	statusReportNotFound   = status.Error(codes.NotFound, "report not found")
+	statusInvalidUUID      = status.Error(codes.InvalidArgument, "invalid UUID")
+	statusNoCategoryName   = status.Error(codes.InvalidArgument, "category name is required")
+	statusNoReportReason   = status.Error(codes.InvalidArgument, "report reason is required")
 )
 
 func internalError(err error) error {
@@ -88,7 +88,7 @@ func (s *Server) GetCategoryInfo(ctx context.Context, req *pb.GetCategoryInfoReq
 	case nil:
 		return category.SingleCategory(), nil
 	case errNotFound:
-		return nil, statusNotFound
+		return nil, statusCategoryNotFound
 	default:
 		return nil, internalError(err)
 	}
@@ -189,7 +189,7 @@ func (s *Server) DeleteReport(ctx context.Context, req *pb.DeleteReportRequest) 
 	case nil:
 		return new(pb.DeleteReportResponse), nil
 	case errNotFound:
-		return nil, statusNotFound
+		return nil, statusReportNotFound
 	default:
 		return nil, internalError(err)
 	}
