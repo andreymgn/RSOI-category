@@ -10,11 +10,12 @@ import (
 )
 
 var (
-	statusCategoryNotFound = status.Error(codes.NotFound, "category not found")
-	statusReportNotFound   = status.Error(codes.NotFound, "report not found")
-	statusInvalidUUID      = status.Error(codes.InvalidArgument, "invalid UUID")
-	statusNoCategoryName   = status.Error(codes.InvalidArgument, "category name is required")
-	statusNoReportReason   = status.Error(codes.InvalidArgument, "report reason is required")
+	statusCategoryNotFound      = status.Error(codes.NotFound, "category not found")
+	statusReportNotFound        = status.Error(codes.NotFound, "report not found")
+	statusInvalidUUID           = status.Error(codes.InvalidArgument, "invalid UUID")
+	statusNoCategoryName        = status.Error(codes.InvalidArgument, "category name is required")
+	statusNoCategoryDescription = status.Error(codes.InvalidArgument, "category description is required")
+	statusNoReportReason        = status.Error(codes.InvalidArgument, "report reason is required")
 )
 
 func internalError(err error) error {
@@ -27,6 +28,7 @@ func (c *Category) SingleCategory() *pb.SingleCategory {
 	res.Uid = c.UID.String()
 	res.UserUid = c.UserUID.String()
 	res.Name = c.Name
+	res.Description = c.Description
 
 	return res
 }
@@ -100,12 +102,16 @@ func (s *Server) CreateCategory(ctx context.Context, req *pb.CreateCategoryReque
 		return nil, statusNoCategoryName
 	}
 
+	if req.Description == "" {
+		return nil, statusNoCategoryDescription
+	}
+
 	userUID, err := uuid.Parse(req.UserUid)
 	if err != nil {
 		return nil, statusInvalidUUID
 	}
 
-	category, err := s.db.createCategory(req.Name, userUID)
+	category, err := s.db.createCategory(req.Name, req.Description, userUID)
 	if err != nil {
 		return nil, internalError(err)
 	}

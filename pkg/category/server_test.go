@@ -24,21 +24,21 @@ func (mdb *mockdb) getAllCategories(pageSize, pageNumber int32) ([]*Category, er
 	uid2 := uuid.New()
 	uid3 := uuid.New()
 
-	result = append(result, &Category{uid1, uid2, "aaa"})
-	result = append(result, &Category{uid2, uid3, "bbb"})
-	result = append(result, &Category{uid3, uid1, "ccc"})
+	result = append(result, &Category{uid1, uid2, "aaa", "aaa"})
+	result = append(result, &Category{uid2, uid3, "bbb", "bbb"})
+	result = append(result, &Category{uid3, uid1, "ccc", "ccc"})
 	return result, nil
 }
 
 func (mdb *mockdb) getCategoryInfo(uid uuid.UUID) (*Category, error) {
-	return &Category{uuid.Nil, uuid.Nil, "aaa"}, nil
+	return &Category{uuid.Nil, uuid.Nil, "aaa", "aaa"}, nil
 }
 
-func (mdb *mockdb) createCategory(name string, userUID uuid.UUID) (*Category, error) {
+func (mdb *mockdb) createCategory(name, description string, userUID uuid.UUID) (*Category, error) {
 	if name == "success" {
 		uid := uuid.New()
 
-		return &Category{uid, userUID, name}, nil
+		return &Category{uid, userUID, name, description}, nil
 	}
 
 	return nil, errDummy
@@ -85,7 +85,7 @@ func TestListCategories(t *testing.T) {
 
 func TestCreateCategory(t *testing.T) {
 	s := &Server{&mockdb{}}
-	req := &pb.CreateCategoryRequest{Name: "success", UserUid: nilUIDString}
+	req := &pb.CreateCategoryRequest{Name: "success", UserUid: nilUIDString, Description: "yeah"}
 	_, err := s.CreateCategory(context.Background(), req)
 	if err != nil {
 		t.Errorf("unexpected error %v", err)
@@ -95,9 +95,15 @@ func TestCreateCategory(t *testing.T) {
 func TestCreateCategoryFail(t *testing.T) {
 	s := &Server{&mockdb{}}
 
-	req := &pb.CreateCategoryRequest{Name: ""}
+	req := &pb.CreateCategoryRequest{Name: "", Description: "nay"}
 	_, err := s.CreateCategory(context.Background(), req)
 	if err != statusNoCategoryName {
+		t.Errorf("unexpected error %v", err)
+	}
+
+	req = &pb.CreateCategoryRequest{Name: "fail", Description: ""}
+	_, err = s.CreateCategory(context.Background(), req)
+	if err != statusNoCategoryDescription {
 		t.Errorf("unexpected error %v", err)
 	}
 

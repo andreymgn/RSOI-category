@@ -3,7 +3,8 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE TABLE categories (
     uid UUID PRIMARY KEY,
     user_uid UUID NOT NULL,
-    name VARCHAR(80) NOT NULL
+    name VARCHAR(80) NOT NULL,
+    description VARCHAR(160) NOT NULL
 );
 
 CREATE TABLE reports (
