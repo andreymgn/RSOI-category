@@ -123,6 +123,10 @@ func (db *db) createCategory(name, description string, userUID uuid.UUID) (*Cate
 	category.Description = description
 
 	result, err := db.Exec(query, category.UID.String(), userUID.String(), name, description)
+	if err != nil {
+		return nil, err
+	}
+
 	nRows, err := result.RowsAffected()
 	if err != nil {
 		return nil, err
@@ -200,6 +204,10 @@ func (db *db) createReport(categoryUID, postUID, commentUID uuid.UUID, reason st
 		report.UID.String(), report.CategoryUID.String(), report.PostUID.String(),
 		report.CommentUID.String(), report.Reason, report.CreatedAt,
 	)
+	if err != nil {
+		return nil, err
+	}
+
 	nRows, err := result.RowsAffected()
 	if err != nil {
 		return nil, err
@@ -215,6 +223,10 @@ func (db *db) createReport(categoryUID, postUID, commentUID uuid.UUID, reason st
 func (db *db) deleteReport(uid uuid.UUID) error {
 	query := "DELETE FROM reports WHERE uid=$1"
 	result, err := db.Exec(query, uid.String())
+	if err != nil {
+		return err
+	}
+
 	nRows, err := result.RowsAffected()
 	if err != nil {
 		return err
