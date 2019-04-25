@@ -7,10 +7,11 @@ import (
 
 func runPost(port int, connString, jaegerAddr string) error {
 	tracer, closer, err := tracer.NewTracer("category", jaegerAddr)
-	defer closer.Close()
 	if err != nil {
 		return err
 	}
+
+	defer closer.Close()
 
 	server, err := category.NewServer(connString)
 	if err != nil {
